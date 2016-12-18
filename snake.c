@@ -13,10 +13,13 @@ static void _clear_prev_pos(char *map);
 
 static void _set_direction_speed(int x, int y);
 
+static void _draw_tail(char *map);
+
 s_snake *snake_init(char *map)
 {
     _snake.x = 4;
     _snake.y = 7;
+    _snake.tail_len = 3;
 
     _update_pos(map);
 
@@ -69,6 +72,11 @@ void snake_update(char *map)
     _update_pos(map);
 }
 
+bool snake_eat(s_food *food)
+{
+    return ((_snake.x == food->x) && (_snake.y == food->y)) ? true : false;
+}
+
 static void _set_direction_speed(int x, int y)
 {
     _snake.xspeed = x;
@@ -83,4 +91,12 @@ static void _update_pos(char *map)
 static void _clear_prev_pos(char *map)
 {
     map[_snake.y * MAP_WIDTH + _snake.x] = ' ';
+}
+
+static void _draw_tail(char *map)
+{
+//    for (int i = 1; i <= _snake.tail_len; ++i)
+//    {
+//        map[_snake.y * MAP_WIDTH + _snake.x + i] = 'o';
+//    }
 }

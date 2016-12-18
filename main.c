@@ -6,6 +6,7 @@
 #include "snake.h"
 #include "map.h"
 #include "keyboard.h"
+#include "food.h"
 
 //#define U_DOUBLE_HORIZONTAL         L'\u2550'
 //#define U_DOUBLE_VERTICAL           L'\u2551'
@@ -22,10 +23,12 @@ int main()
 //    setlocale(LC_CTYPE, "en_US.utf8");
 //    wprintf(L"%lc", U_DOUBLE_HORIZONTAL);
 
-    s_snake *snake;
+//    s_snake *snake;
     char *map = get_map();
+    s_food food;
 
-    snake = snake_init(map);
+    snake_init(map);
+    food_init(&food);
 
     while (1)
     {
@@ -57,7 +60,15 @@ int main()
 
         clear();
         map_draw();
+
+        if (snake_eat(&food))
+        {
+            food_new_location(&food, map);
+        }
+
         snake_update(map);
+        food_draw(&food, map);
+
         usleep(150000);
     }
 }

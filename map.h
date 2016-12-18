@@ -8,6 +8,11 @@
 #define MAP_HEIGHT      16
 #define MAP_WIDTH       43
 
+#define MIN_LIM_X       1
+#define MAX_LIM_X       MAP_WIDTH - 3
+#define MIN_LIM_Y       1
+#define MAX_LIM_Y       MAP_HEIGHT - 2
+
 //typedef char t_map[MAP_HEIGHT][MAP_WIDTH];
 
 char *get_map(void);

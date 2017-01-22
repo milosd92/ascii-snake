@@ -36,6 +36,9 @@ static void _pick_location(s_food *food)
 {
     food->x = rand() % (MAX_LIM_X - MIN_LIM_X) + MIN_LIM_X;
     food->y = rand() % (MAX_LIM_Y - MIN_LIM_Y) + MIN_LIM_Y;
+//    food->x = 4;
+//    food->y = 7;
+
 }
 
 static void _clear(s_food *food, char *map)

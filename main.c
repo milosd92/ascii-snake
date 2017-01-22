@@ -61,7 +61,7 @@ int main()
         clear();
         map_draw();
 
-        if (snake_eat(&food))
+        if (snake_eat(&food, map))
         {
             food_new_location(&food, map);
         }

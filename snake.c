@@ -5,6 +5,8 @@
 #include "map.h"
 #include "snake.h"
 
+#include <string.h>
+
 s_snake _snake;
 
 static void _update_pos(char *map);
@@ -13,18 +15,24 @@ static void _clear_prev_pos(char *map);
 
 static void _set_direction_speed(int x, int y);
 
+static void _clear_tail(char *map);
+
 static void _draw_tail(char *map);
+
+static void _enlarge_tail();
 
 s_snake *snake_init(char *map)
 {
     _snake.x = 4;
     _snake.y = 7;
-    _snake.tail_len = 3;
 
     _update_pos(map);
 
     _snake.xspeed = 1;
     _snake.yspeed = 0;
+
+    _snake.tail_len = 0;
+    memset(_snake.tail, 0, sizeof(_snake.tail));
 
     return &_snake;
 }
@@ -66,15 +74,39 @@ void snake_update(char *map)
         return;
     }
 
+    _clear_tail(map);
+
+    _snake.tail[_snake.tail_len].x = _snake.x;
+    _snake.tail[_snake.tail_len].y = _snake.y;
+
+    _draw_tail(map);
+
     _snake.x += _snake.xspeed;
     _snake.y += _snake.yspeed;
 
     _update_pos(map);
 }
 
-bool snake_eat(s_food *food)
+bool snake_eat(s_food *food, char *map)
 {
-    return ((_snake.x == food->x) && (_snake.y == food->y)) ? true : false;
+    if ((_snake.x == food->x) && (_snake.y == food->y))
+    {
+        _enlarge_tail();
+
+        return true;
+    }
+    else
+    {
+        _clear_tail(map);
+
+        for (int i = 0; i < _snake.tail_len; ++i)
+        {
+            _snake.tail[i].x = _snake.tail[i + 1].x;
+            _snake.tail[i].y = _snake.tail[i + 1].y;
+        }
+
+        return false;
+    }
 }
 
 static void _set_direction_speed(int x, int y)
@@ -93,10 +125,23 @@ static void _clear_prev_pos(char *map)
     map[_snake.y * MAP_WIDTH + _snake.x] = ' ';
 }
 
+static void _clear_tail(char *map)
+{
+    for (int i = 0; i < _snake.tail_len; ++i)
+    {
+        map[_snake.tail[i].y * MAP_WIDTH + _snake.tail[i].x + i] = ' ';
+    }
+}
+
 static void _draw_tail(char *map)
 {
-//    for (int i = 1; i <= _snake.tail_len; ++i)
-//    {
-//        map[_snake.y * MAP_WIDTH + _snake.x + i] = 'o';
-//    }
+    for (int i = 0; i < _snake.tail_len; ++i)
+    {
+        map[_snake.tail[i].y * MAP_WIDTH + _snake.tail[i].x + i] = 'o';
+    }
+}
+
+static void _enlarge_tail()
+{
+    _snake.tail_len++;
 }
